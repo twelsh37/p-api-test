@@ -17,3 +17,32 @@ The 5 models that are available currently (28/11/2023) are:
 | 3 | mistral-7b-instruct    |
 | 4 | pplx-7b-chat           |
 | 5 | pplx-70b-chat-alpha    |
+
+
+## Example output
+Here is the program output. It has been modified for readability
+
+```
+[
+	{"role": "user", 
+	 "content": "create a hello world program in python"
+	}, 
+	{"role": "assistant", 
+	"content": "Sure! Here is a simple \"Hello, World!\" program written in Python:\n
+
+        '''
+        print("Hello, World!")
+        '''
+	This program will output the string "Hello, World!" to the screen. 
+	If you save this code to a file with a `.py` extension (such as `hello.py`) and run
+	it with the Python interpreter, it will print the message to the console. 
+	For example, you can run the program from the command line with the following command:
+	
+        '''
+        python hello.py
+        '''
+	
+	This will print the message "Hello, World!" to the console."
+	}
+]
+```
