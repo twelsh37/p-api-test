@@ -26,3 +26,9 @@ The 9 models that are available currently (31/01/2024) are:
 
 ![img.png](img.png)
 
+## Pre requisites.
+Before running the code you need to create a ".env" file in your code directory. 
+I use the .env file to store my perplexity API_key it has one entry set out as the following.
+
+API_KEY = '<Perplexity API Key'
+
