@@ -1,5 +1,4 @@
 # Perplexity AI API Test Code
-<<<<<<< HEAD
 Sample code utilising Perplexity API<p>
 You need a perplexity API key for this code to work. This [document](https://docs.perplexity.ai/docs/getting-started) takes you through getting an API key' 
 
