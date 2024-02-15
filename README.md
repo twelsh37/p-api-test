@@ -1,5 +1,4 @@
 # Perplexity AI API Test Code
-<<<<<<< HEAD
 Sample code utilising Perplexity API<p>
 You need a perplexity API key for this code to work. This [document](https://docs.perplexity.ai/docs/getting-started) takes you through getting an API key' 
 
@@ -26,4 +25,10 @@ The 9 models that are available currently (31/01/2024) are:
 <br>
 
 ![img.png](img.png)
+
+## Pre requisites.
+Before running the code you need to create a ".env" file in your code directory. 
+I use the .env file to store my perplexity API_key it has one entry set out as the following.
+
+API_KEY = '<Perplexity API Key'
 
