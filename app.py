@@ -40,6 +40,7 @@ import dash_bootstrap_components as dbc
 import dash
 from dotenv import load_dotenv
 import requests
+from bs4 import BeautifulSoup
 
 # Define the logging configuration for the application
 logging.basicConfig(
@@ -71,6 +72,7 @@ logging.basicConfig(
 # load our environment variabled
 load_dotenv()
 
+url = 'https://docs.perplexity.ai/docs/model-cards'
 
 # API key Load funktion
 def load_api_key() -> str:
@@ -81,6 +83,57 @@ def load_api_key() -> str:
         str: The API key.
     """
     return os.getenv("API_KEY")
+
+
+def fetch_url_content(url: str) -> str:
+    """
+        Fetches the HTML content of a webpage given a URL.
+
+    Args:
+        url (str): The webpage URL.
+
+    Returns:
+        str: The HTML content of the webpage.
+    """
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.content
+    # Deal with HTTP error
+    except requests.exceptions.HTTPError as errh:
+        print("HTTP Error:", errh)
+        return ''
+    # Deal with request failure
+    except requests.exceptions.RequestException as err:
+        print("Request Failed:", err)
+        return ''
+
+def fetch_models(url: str) -> list:
+    """
+    Scrapes a webpage for a table of models.
+
+    Args:
+        url (str): The URL of the webpage to scrape.
+
+    Returns:
+        list: The list of model names found in the webpage.
+    """
+    content = fetch_url_content(url)
+    if content:
+        soup = BeautifulSoup(content, 'html.parser')
+        table = soup.find('div', {'class': 'rdmd-table-inner'})
+
+        # Extract model names
+        models = [
+            cell.find('code', {'tabindex': '0'}).text
+            for row in table.find_all('tr')
+            if (cell := row.find('td')) is not None
+            and cell.find('code', {'tabindex': '0'}) is not None
+        ]
+        return models
+    else:
+        print("No content retrieved from URL.")
+        return []
 
 
 # load our API key
@@ -111,27 +164,8 @@ app.layout = dbc.Container(
                 dcc.Dropdown(
                     id="model-dropdown",
                     # Options for the dropdown, each defined as a dictionary
-                    options=[
-                        {
-                            "label": "codellama-34b-instruct",
-                            "value": "codellama-34b-instruct",
-                        },
-                        {"label": "llama-2-70b-chat", "value": "llama-2-70b-chat"},
-                        {
-                            "label": "mistral-7b-instruct",
-                            "value": "mistral-7b-instruct",
-                        },
-                        {"label": "pplx-7b-chat", "value": "pplx-7b-chat"},
-                        {"label": "pplx-70b-chat", "value": "pplx-70b-chat"},
-                        {"label": "pplx-7b-online", "value": "pplx-7b-online"},
-                        {"label": "llava-7b-chat", "value": "llava-7b-chat"},
-                        {
-                            "label": "mixtral-8x7b-instruct",
-                            "value": "mixtral-8x7b-instruct",
-                        },
-                        {"label": "mistral-medium", "value": "mistral-medium"},
-                        {"label": "related", "value": "related"},
-                    ],
+                    options=[{'label': model, 'value': model} for model in fetch_models(url)],
+
                     # Default selected option
                     value="codellama-34b-instruct",
                 ),
