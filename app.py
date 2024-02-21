@@ -74,6 +74,7 @@ load_dotenv()
 
 url = 'https://docs.perplexity.ai/docs/model-cards'
 
+
 # API key Load funktion
 def load_api_key() -> str:
     """
@@ -85,18 +86,18 @@ def load_api_key() -> str:
     return os.getenv("API_KEY")
 
 
-def fetch_url_content(url: str) -> str:
+def fetch_url_content(uri: str) -> bytes | str:
     """
         Fetches the HTML content of a webpage given a URL.
 
     Args:
-        url (str): The webpage URL.
+        uri (str): The webpage URL.
 
     Returns:
         str: The HTML content of the webpage.
     """
     try:
-        response = requests.get(url)
+        response = requests.get(uri)
         response.raise_for_status()
         return response.content
     # Deal with HTTP error
@@ -108,17 +109,18 @@ def fetch_url_content(url: str) -> str:
         print("Request Failed:", err)
         return ''
 
-def fetch_models(url: str) -> list:
+
+def fetch_models(uri: str) -> list:
     """
     Scrapes a webpage for a table of models.
 
     Args:
-        url (str): The URL of the webpage to scrape.
+        uri (str): The URL of the webpage to scrape.
 
     Returns:
         list: The list of model names found in the webpage.
     """
-    content = fetch_url_content(url)
+    content = fetch_url_content(uri)
     if content:
         soup = BeautifulSoup(content, 'html.parser')
         table = soup.find('div', {'class': 'rdmd-table-inner'})
@@ -233,13 +235,13 @@ app.layout = dbc.Container(
 )
 
 
-def get_api_response(url, payload, headers):
+def get_api_response(uri, payload, headers):
     """
     Send a request to the given url with provided payload and headers.
     Return the response upon success or log an error upon failure.
     """
     try:
-        response = requests.post(url, json=payload, headers=headers)
+        response = requests.post(uri, json=payload, headers=headers)
         response.raise_for_status()
 
     except requests.exceptions.RequestException as err:
@@ -271,7 +273,7 @@ def update_output(n_clicks, model_value, question_value):
         raise PreventUpdate
 
     api_key1 = load_api_key()
-    url = "https://api.perplexity.ai/chat/completions"
+    ura = "https://api.perplexity.ai/chat/completions"
     headers = {
         "accept": "application/json",
         "content-type": "application/json",
@@ -281,7 +283,7 @@ def update_output(n_clicks, model_value, question_value):
         "model": model_value,
         "messages": [{"role": "user", "content": question_value}],
     }
-    response = get_api_response(url, payload, headers)
+    response = get_api_response(ura, payload, headers)
     logging.info(f"Response from API: {response}")
     return response["choices"][0]["message"]["content"]
 

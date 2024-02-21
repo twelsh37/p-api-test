@@ -4,18 +4,19 @@
 import requests
 from bs4 import BeautifulSoup
 
-def fetch_url_content(url: str) -> str:
+
+def fetch_url_content(uri: str) -> bytes | str:
     """
         Fetches the HTML content of a webpage given a URL.
 
     Args:
-        url (str): The webpage URL.
+        uri (str): The webpage URL.
 
     Returns:
         str: The HTML content of the webpage.
     """
     try:
-        response = requests.get(url)
+        response = requests.get(uri)
         response.raise_for_status()
         return response.content
     # Deal with HTTP error
@@ -27,17 +28,18 @@ def fetch_url_content(url: str) -> str:
         print("Request Failed:", err)
         return ''
 
-def fetch_models(url: str) -> list:
+
+def fetch_models(uri: str) -> list:
     """
     Scrapes a webpage for a table of models.
 
     Args:
-        url (str): The URL of the webpage to scrape.
+        uri (str): The URL of the webpage to scrape.
 
     Returns:
         list: The list of model names found in the webpage.
     """
-    content = fetch_url_content(url)
+    content = fetch_url_content(uri)
     if content:
         soup = BeautifulSoup(content, 'html.parser')
         table = soup.find('div', {'class': 'rdmd-table-inner'})
@@ -53,6 +55,7 @@ def fetch_models(url: str) -> list:
     else:
         print("No content retrieved from URL.")
         return []
+
 
 # Target URL
 url = 'https://docs.perplexity.ai/docs/model-cards'
