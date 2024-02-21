@@ -65,7 +65,7 @@ logging.basicConfig(
     # Levels are: NOTSET, DEBUG, INFO, WARNING, ERROR, CRITICAL in ascending order.
     # 'DEBUG' is the lowest possible level -> all messages will be logged.
     # Raise this level to record only higher-level log messages.
-    level=logging.DEBUG,
+    level=logging.WARNING,
 )
 
 
