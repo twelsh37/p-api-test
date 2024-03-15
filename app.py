@@ -281,7 +281,7 @@ def update_output(n_clicks, model_value, question_value):
     }
     payload = {
         "model": model_value,
-        "messages": [{"role": "user", "content": question_value, "temperature":2.2}],
+        "messages": [{"role": "user", "content": question_value, "temperature":1.5}],
     }
     response = get_api_response(ura, payload, headers)
     logging.info(f"Response from API: {response}")
